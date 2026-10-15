@@ -1,0 +1,42 @@
+@baseUrl = http://localhost:5003
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMWRjNGNkOC00OTQ0LTQ5ZTYtOTVmZi0wMjExNWVmZjEwNjgiLCJlbWFpbCI6InRlc3RlQGVtYWlsLmNvbSIsImV4cCI6MTc5MjAyMzEyNCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMyIsImF1ZCI6InRhc2tmbG93LWFwaSJ9.j_QSq7iIdSh3E2SK2xitPOX_wkqu59ObazlsSSe8omA
+@projectId = 1
+@userId = 5a11e3e3-6c04-441d-8271-d0682df84ddb
+
+### Listar projetos do usuário autenticado
+GET {{baseUrl}}/api/projects
+Authorization: Bearer {{token}}
+
+### Buscar projeto por ID
+GET {{baseUrl}}/api/projects/{{projectId}}
+Authorization: Bearer {{token}}
+
+### Criar projeto
+POST {{baseUrl}}/api/projects
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Meu projeto",
+  "description": "Descrição do meu projeto"
+}
+
+### Adicionar usuário ao projeto
+POST {{baseUrl}}/api/projects/addUser
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "projectId": {{projectId}},
+  "userId": "{{userId}}"
+}
+
+### Remove usuário do projeto
+POST {{baseUrl}}/api/projects/removeUser
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "projectId": {{projectId}},
+  "userId": "{{userId}}"
+}
