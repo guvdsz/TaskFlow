@@ -55,6 +55,7 @@ public class ProjectRepository(ApplicationDbContext context) : IProjectRepositor
 
         var projects = await query
             .Include(s => s.ProjectUsers)
+            .OrderBy(p => p.Id)
             .Skip(offset)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
