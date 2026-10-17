@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Api.Dtos.Project;
+using TaskFlow.Api.Dtos.Shared;
 using TaskFlow.Api.Interfaces.Project;
 using TaskFlow.Api.Mappers;
 using TaskFlow.Api.Models;
@@ -29,7 +30,7 @@ namespace TaskFlow.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] PaginatedRequestDto paginatedRequestDto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
                 ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub);
@@ -39,9 +40,7 @@ namespace TaskFlow.Api.Controllers
                 return Unauthorized();
             }
 
-            var projects = await _projectRepository.GetByOwnerIdAsync(userId);
-
-            var result = projects.Select(p => p.ToProjectDto());
+            var result = await _projectRepository.GetByOwnerIdAsync(userId, paginatedRequestDto.PageSize, paginatedRequestDto.PageNumber);
 
             return Ok(result);
         }

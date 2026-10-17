@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using TaskFlow.Api.Data;
+using TaskFlow.Api.Dtos.Project;
+using TaskFlow.Api.Dtos.Shared;
 using TaskFlow.Api.Interfaces.Project;
+using TaskFlow.Api.Mappers;
 using TaskFlow.Api.Models;
 using Task = System.Threading.Tasks.Task;
 
@@ -35,16 +38,38 @@ public class ProjectRepository(ApplicationDbContext context) : IProjectRepositor
                 cancellationToken);
     }
 
-    public async Task<IReadOnlyList<Project>> GetByOwnerIdAsync(
+    public async Task<PaginatedResponseDto<ProjectDto>> GetByOwnerIdAsync(
         string ownerId,
+        int pageSize,
+        int pageNumber,
         CancellationToken cancellationToken = default
     )
     {
-        return await context.Projects
+        var query = context.Projects
             .AsNoTracking()
-            .Where(project => project.OwnerId == ownerId)
+            .Where(project => project.OwnerId == ownerId);
+
+        int totalItems = await query.CountAsync(cancellationToken);
+
+        int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+        var offset = (pageNumber - 1) * pageSize;
+
+        var projects = await query
             .Include(s => s.ProjectUsers)
+            .Skip(offset)
+            .Take(pageSize)
+            .Select(p => p.ToProjectDto())
             .ToListAsync(cancellationToken);
+
+        return new PaginatedResponseDto<ProjectDto>
+        {
+            Data = projects,
+            CurrentPage = pageNumber,
+            PageSize = pageSize,
+            TotalItems = totalItems,
+            TotalPages = totalPages
+        };
     }
 
     public async Task AddUserToProjectAsync(
