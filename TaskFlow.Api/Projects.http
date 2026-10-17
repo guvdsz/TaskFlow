@@ -4,7 +4,7 @@
 @userId = 5a11e3e3-6c04-441d-8271-d0682df84ddb
 
 ### Listar projetos do usuário autenticado
-GET {{baseUrl}}/api/projects?pageSize=1
+GET {{baseUrl}}/api/projects?pageSize=1&pageNumber=2
 Authorization: Bearer {{token}}
 
 ### Buscar projeto por ID

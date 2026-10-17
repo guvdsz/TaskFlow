@@ -1,9 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TaskFlow.Api.Data;
-using TaskFlow.Api.Dtos.Project;
 using TaskFlow.Api.Dtos.Shared;
 using TaskFlow.Api.Interfaces.Project;
-using TaskFlow.Api.Mappers;
 using TaskFlow.Api.Models;
 using Task = System.Threading.Tasks.Task;
 
@@ -38,7 +36,7 @@ public class ProjectRepository(ApplicationDbContext context) : IProjectRepositor
                 cancellationToken);
     }
 
-    public async Task<PaginatedResponseDto<ProjectDto>> GetByOwnerIdAsync(
+    public async Task<PaginatedResponseDto<Project>> GetByOwnerIdAsync(
         string ownerId,
         int pageSize,
         int pageNumber,
@@ -59,10 +57,9 @@ public class ProjectRepository(ApplicationDbContext context) : IProjectRepositor
             .Include(s => s.ProjectUsers)
             .Skip(offset)
             .Take(pageSize)
-            .Select(p => p.ToProjectDto())
             .ToListAsync(cancellationToken);
 
-        return new PaginatedResponseDto<ProjectDto>
+        return new PaginatedResponseDto<Project>
         {
             Data = projects,
             CurrentPage = pageNumber,

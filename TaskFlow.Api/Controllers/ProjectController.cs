@@ -42,7 +42,16 @@ namespace TaskFlow.Api.Controllers
 
             var result = await _projectRepository.GetByOwnerIdAsync(userId, paginatedRequestDto.PageSize, paginatedRequestDto.PageNumber);
 
-            return Ok(result);
+            var pagedResult = new PaginatedResponseDto<ProjectDto>
+            {
+                Data = result.Data.Select(p => p.ToProjectDto()),
+                CurrentPage = result.CurrentPage,
+                PageSize = result.PageSize,
+                TotalItems = result.TotalItems,
+                TotalPages = result.TotalPages
+            };
+
+            return Ok(pagedResult);
         }
 
         [HttpGet("{id:int}")]

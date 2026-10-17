@@ -1,5 +1,4 @@
 using System.Runtime.CompilerServices;
-using TaskFlow.Api.Dtos.Project;
 using TaskFlow.Api.Dtos.Shared;
 using TaskFlow.Api.Models;
 using ProjectModel = TaskFlow.Api.Models.Project;
@@ -32,7 +31,7 @@ public interface IProjectRepository
     int projectId,
     CancellationToken cancellationToken = default);
 
-    Task<PaginatedResponseDto<ProjectDto>> GetByOwnerIdAsync(
+    Task<PaginatedResponseDto<ProjectModel>> GetByOwnerIdAsync(
         string ownerId,
         int pageSize,
         int pageNumber,
