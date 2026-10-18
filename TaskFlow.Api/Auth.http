@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:5003
-@email = teste@email.com
-@password = Teste123@
+@email = testassse@email.com
+@password = aaaaaaa
 
 ### Register
 # @name register

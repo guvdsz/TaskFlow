@@ -62,6 +62,7 @@ public static class AuthExtensions
         builder.Services
         .AddIdentityCore<User>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
+        .AddErrorDescriber<CustomIdentityErrorDescriber>()
         .AddSignInManager();
     }
 }
